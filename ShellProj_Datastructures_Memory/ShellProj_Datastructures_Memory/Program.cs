@@ -228,7 +228,70 @@ namespace ShellProj_Datastructures_Memory
              * Loop this method until the user inputs something to exit to main menue.
              * Create a switch with cases to push or pop items
              * Make sure to look at the stack after pushing and and poping to see how it behaves
-            */           
+            */
+            Stack theStack = new Stack();
+            string Description = "Stack contains:";
+            bool Separated = true;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine(DisplayList(theStack, Description, Separated));
+                Console.WriteLine("--------------------------------------------------");
+                Console.WriteLine("Input 0 to come back to main menu");
+                Console.WriteLine("Input #string to reverse string");
+                Console.WriteLine("Input - to take person from stack");
+                Console.WriteLine("Input +string to put person into stack");
+
+                string input = Console.ReadLine();
+                if (input == "0") break;
+                char nav = input[0];
+                string value = input.Substring(1);
+                switch (nav)
+                {
+                    case '+':
+                        if (value.Length == 0)
+                            MessageBox.Show("Name can not be empty");
+                        else
+                            theStack.Push(value);
+                        Separated = true;
+                        break;
+                    case '-':
+                        if (theStack.Count > 0)
+                            theStack.Pop();
+                        else
+                            MessageBox.Show("The stack is now empty");
+                        Separated = true;
+                        break;
+                    case '#':
+                        if (value.Length == 0)
+                            MessageBox.Show("String can not be empty");
+                        else
+                        {
+                            theStack = PushString(value);
+                            Description = "Reversed string: ";
+                            Separated = false;
+                        }
+                        break;
+                    default:
+                        MessageBox.Show("Please only use +,- or # to update stack");
+                        //System.Threading.Thread.Sleep(500);
+                        break;
+                }
+
+            } while (true);
+
+        }
+
+        //Put string into a stack
+        private static Stack PushString(string input)
+        {
+            Stack theStack = new Stack();
+            foreach (char ch in input)
+            {
+                theStack.Push(ch);
+            }
+
+            return theStack;
         }
 
 

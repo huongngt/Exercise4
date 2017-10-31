@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ShellProj_Datastructures_Memory
 {
@@ -14,10 +16,11 @@ namespace ShellProj_Datastructures_Memory
         /// <param name="args"></param>
         static void Main()
         {
+
             bool run = true;
             while (true)
             {
-
+                Console.Clear();
                 Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 ,4, 0) of your choice"
                     + "\n1. Examine a List"
                     + "\n2. Examine a Queue"
@@ -75,15 +78,79 @@ namespace ShellProj_Datastructures_Memory
              * As a default case, tell them to use only + or -
              * Below you can see some inspirational code to begin working.
             */
+            List<string> theList = new List<string>();
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("List contains:");
+                Console.WriteLine(DisplayList(theList));
+                Console.WriteLine("--------------------------------------------------");
+                Console.WriteLine("Please input string with + or - to update the list");
+                Console.WriteLine("Input 0 to come back to main menu");
+                string input = Console.ReadLine();
 
-            //List<string> theList = new List<string>();
-            //string input = Console.ReadLine();
-            //char nav = input[0];
-            //string value = input.substring(1);
+                // if user enter 0 then exit to main menu
+                if (input == "0") break;
 
-            //switch(nav){...}
+                //If user enter empty string, inform they need enter valid string
+                if (input.Length == 0)
+                {
+                    MessageBox.Show("Please input the string begin with + or -");
+                    continue;
+                }
+
+                char nav = input[0];
+                string value = input.Substring(1);
+
+                //if user enter only "+" or "-" then inform that can not process empty element
+                if (value.Length == 0)
+                {
+                    MessageBox.Show("You can not input the empty string");
+                    continue;
+                }
+
+                //normal case
+                switch (nav)
+                {
+                    case '+':                    
+                        theList.Add(value);
+                        break;
+                    case '-': 
+                        //if user remove non-existance value, inform that the value not found                       
+                        if (!theList.Remove(value))
+                            MessageBox.Show("Inputed string " + value + " not found. Or the list is empty.");                                              
+                        break;
+                    default:
+                        MessageBox.Show("Please only use + or - to update list");
+                        //System.Threading.Thread.Sleep(500);
+                        break;
+                }
+                
+            } while (true);
+            
         }
 
+
+        //Display the list with capacity
+        private static string DisplayList(List<string> theList)
+        {
+            string output ="";
+            if (theList.Count == 0) output += "Empty";
+            else
+            {
+                foreach (string s in theList)
+                {
+                    output += s + "\n";
+                }
+            }
+            output += "\nCapacity of the list: " + theList.Capacity;
+            return output;
+        }
+
+        //Display other collection with count
+        
+        
+        
         /// <summary>
         /// Examines the datastructure Queue
         /// </summary>
@@ -94,6 +161,7 @@ namespace ShellProj_Datastructures_Memory
              * Create a switch with cases to enqueue items or dequeue items
              * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
             */
+           
         }
 
         /// <summary>
@@ -106,7 +174,9 @@ namespace ShellProj_Datastructures_Memory
              * Create a switch with cases to push or pop items
              * Make sure to look at the stack after pushing and and poping to see how it behaves
             */
+          
         }
+
 
         static void CheckParanthesis()
         {
@@ -115,6 +185,7 @@ namespace ShellProj_Datastructures_Memory
              * Example of correct: (()), {}, [({})]
              * Example of incorrect: (()]), [), {[()}]
              */
+
         }
 
     }

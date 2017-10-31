@@ -64,7 +64,7 @@ namespace ShellProj_Datastructures_Memory
         /// <summary>
         /// Examines the datastructure List
         /// </summary>
-        static void ExamineList()
+    public static void ExamineList()
         {
             /*
              * Loop this method untill the user inputs something to exit to main menue.
@@ -76,12 +76,51 @@ namespace ShellProj_Datastructures_Memory
              * Below you can see some inspirational code to begin working.
             */
 
-            //List<string> theList = new List<string>();
-            //string input = Console.ReadLine();
-            //char nav = input[0];
-            //string value = input.substring(1);
+            List<string> theList = new List<string>();
 
-            //switch(nav){...}
+            do {
+                
+
+                Console.WriteLine("Please enter values with '+' or '-' ");
+                string input = Console.ReadLine();
+
+                
+                if (input == "0")
+                {
+                    break;
+                }
+                char nav = input[0];
+                string value = input.Substring(1);
+                //switch(nav){...}
+
+                switch (nav)
+                {
+                    case '+':
+
+                        theList.Add(value);
+                        break;
+                    case '-':
+                        theList.Remove(value);
+                       Console.WriteLine("Value removed from the list is: " + value);
+                        break;
+                    default:
+                        Console.WriteLine("Please use + or -");
+                        break;
+                }
+                foreach (var item in theList)
+                {
+                    Console.WriteLine("Values added to the list are: " + item);
+                }
+
+                Console.WriteLine("----------------------------------------------------");
+                Console.WriteLine("Total Values added to list :" + theList.Count);
+                Console.WriteLine("Capacity of the list is :" + theList.Capacity);
+                Console.WriteLine("----------------------------------------------------");
+
+
+            } while (true);
+            Console.Clear();
+            Console.ReadLine();
         }
 
         /// <summary>
@@ -94,6 +133,11 @@ namespace ShellProj_Datastructures_Memory
              * Create a switch with cases to enqueue items or dequeue items
              * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
             */
+            Queue<string> queue = new Queue<string>();
+           
+
+       
+
         }
 
         /// <summary>

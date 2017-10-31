@@ -148,9 +148,23 @@ namespace ShellProj_Datastructures_Memory
         }
 
         //Display other collection with count
-        
-        
-        
+
+        private static string DisplayList(ICollection theList, string Description, bool SeparateItem = true)
+        {
+            string output = Description + "\n";
+            if (theList.Count == 0) output += "Empty";
+            else
+            {
+                foreach (var s in theList)
+                {
+                    output += s + (SeparateItem ? "\n" : "");
+                }
+            }
+            output += "\nTotal: " + theList.Count;
+            return output;
+        }
+
+
         /// <summary>
         /// Examines the datastructure Queue
         /// </summary>
@@ -161,7 +175,48 @@ namespace ShellProj_Datastructures_Memory
              * Create a switch with cases to enqueue items or dequeue items
              * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
             */
-           
+
+            Queue theQueue = new Queue();
+            do
+            {
+                Console.Clear();
+                Console.WriteLine(DisplayList(theQueue, "Queue contains:"));
+                Console.WriteLine("--------------------------------------------------");
+                Console.WriteLine("Input 0 to come back to main menu");
+                Console.WriteLine("Input +string to put person into queue");
+                Console.WriteLine("Input - to take person from queue");
+                string input = Console.ReadLine();
+                if (input == "0") break;
+
+                //If user enter empty string, inform they need enter valid string
+                if (input.Length == 0)
+                {
+                    MessageBox.Show("Please input the string begin with + or -");
+                    continue;
+                }
+                char nav = input[0];
+                string value = input.Substring(1);
+                switch (nav)
+                {
+                    case '+':
+                        if (value.Length == 0)
+                            MessageBox.Show("Name can not be empty");
+                        else
+                            theQueue.Enqueue(value);
+                        break;
+                    case '-':
+                        if (theQueue.Count > 0)
+                            theQueue.Dequeue();
+                        else
+                            MessageBox.Show("The queue is now empty");
+                        break;
+                    default:
+                        MessageBox.Show("Please only use + or - to update queue");
+                        //System.Threading.Thread.Sleep(500);
+                        break;
+                }
+
+            } while (true);
         }
 
         /// <summary>
@@ -173,8 +228,7 @@ namespace ShellProj_Datastructures_Memory
              * Loop this method until the user inputs something to exit to main menue.
              * Create a switch with cases to push or pop items
              * Make sure to look at the stack after pushing and and poping to see how it behaves
-            */
-          
+            */           
         }
 
 

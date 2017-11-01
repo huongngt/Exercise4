@@ -302,8 +302,70 @@ namespace ShellProj_Datastructures_Memory
              * Example of correct: (()), {}, [({})]
              * Example of incorrect: (()]), [), {[()}]
              */
+            Console.Clear();
+            Console.Write("Please input string to check paranthesis: ");
+            string input = Console.ReadLine();
 
+            //If user enter empty string, inform they need enter valid string
+            if (input.Length == 0)
+            {
+                MessageBox.Show("String can not be empty");
+                return;
+            }
+
+            //Queue to contain paranthesis character in inputed string
+            Queue theQueue = new Queue();            
+            char[] paranthesis = new char[] { '<', '>', '{', '}', '[', ']', '(', ')' };
+            foreach( char ch in input)
+            {
+                if (paranthesis.Contains(ch))
+                    theQueue.Enqueue(ch);
+            }
+
+            //Array to check each paranthesis, can not use directly queue because it's updated through each iteration
+            char[] existingParanthesis = new char[theQueue.Count];
+            theQueue.CopyTo(existingParanthesis, 0);
+
+            //algorithm: take the first paranthesis in queue, put it into stack
+            //Take the second paranthesis in queue, 
+            //If it is matching with the one in stack -> remove both of them from queue and stack. Otherwise, put it into stack.
+            //Continue to the end of list. 
+            //If the stack is empty (everything has matched) -> input string is well formed. Otherwise -> not well formed.
+            Stack theStack = new Stack();
+            foreach (char ch in existingParanthesis)
+            {
+                if (theStack.Count == 0 || !MatchClose(ch,(char) theStack.Peek()))
+                {
+                    theQueue.Dequeue();
+                    theStack.Push(ch);
+                }
+                else
+                {
+                    theQueue.Dequeue();
+                    theStack.Pop();
+                }
+                    
+            }
+
+            if (theStack.Count == 0)
+                Console.WriteLine("Inputed string is well formed");
+            else
+                Console.WriteLine("Inputed string is NOT well formed");
+            Console.ReadLine();
+   
         }
 
+        private static bool MatchClose(char close, char open)
+        {
+            if (open.Equals('{') && close.Equals('}'))
+                return true;
+            if (open.Equals('<') && close.Equals('>'))
+                return true;
+            if (open.Equals('(') && close.Equals(')'))
+                return true;
+            if (open.Equals('[') && close.Equals(']'))
+                return true;
+            return false;
+        }
     }
 }

@@ -261,36 +261,30 @@ namespace ShellProj_Datastructures_Memory
                 //Queue to contain paranthesis character in inputed string
                 Queue theQueue = new Queue();
                 char[] paranthesis = new char[] { '<', '>', '{', '}', '[', ']', '(', ')' };
+
+                //algorithm: go through all character in string
+                //If it is a parenthesis then:
+                //If the stack is empty, put it into the stack
+                //If the stack is not empty => compare it with the first element in stack
+                //if not match => put it to stack
+                //If match => take the element from the stack
+                //If the stack is empty (everything has matched) -> input string is well formed. Otherwise -> not well formed.
+                Stack theStack = new Stack();
                 foreach (char ch in input)
                 {
                     if (paranthesis.Contains(ch))
-                        theQueue.Enqueue(ch);
-                }
-
-                //Array to check each paranthesis, can not use directly queue because it's updated through each iteration
-                char[] existingParanthesis = new char[theQueue.Count];
-                theQueue.CopyTo(existingParanthesis, 0);
-
-                //algorithm: take the first paranthesis in queue, put it into stack
-                //Take the second paranthesis in queue, 
-                //If it is matching with the one in stack -> remove both of them from queue and stack. Otherwise, put it into stack.
-                //Continue to the end of list. 
-                //If the stack is empty (everything has matched) -> input string is well formed. Otherwise -> not well formed.
-                Stack theStack = new Stack();
-                foreach (char ch in existingParanthesis)
-                {
-                    if (theStack.Count == 0 || !MatchCouple(ch, (char)theStack.Peek()))
                     {
-                        theQueue.Dequeue();
-                        theStack.Push(ch);
-                    }
-                    else
-                    {
-                        theQueue.Dequeue();
-                        theStack.Pop();
-                    }
-
-                }
+                        if (theStack.Count == 0 || !MatchCouple((char)theStack.Peek(),ch))
+                        {
+                            theStack.Push(ch);
+                        }
+                        else
+                        {
+                            theStack.Pop();
+                        }
+                    }                   
+                       
+                }                
 
                 if (theStack.Count == 0)
                     Console.WriteLine("Inputed string is well formed");
@@ -434,7 +428,7 @@ namespace ShellProj_Datastructures_Memory
 
         }
         
-        private static bool MatchCouple(char close, char open)
+        private static bool MatchCouple(char open, char close)
         {
             if (open.Equals('{') && close.Equals('}'))
                 return true;

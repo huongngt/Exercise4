@@ -21,11 +21,13 @@ namespace ShellProj_Datastructures_Memory
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 ,4, 0) of your choice"
+                Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 ,4, 5, 6, 0) of your choice"
                     + "\n1. Examine a List"
                     + "\n2. Examine a Queue"
                     + "\n3. Examine a Stack"
                     + "\n4. CheckParanthesis"
+                    + "\n5. Examine recursion"
+                    + "\n6. Examine iteration"
                     + "\n0. Exit the application");
                 char input = ' '; //Creates the character input to be used with the switch-case below.
                 try
@@ -51,10 +53,12 @@ namespace ShellProj_Datastructures_Memory
                     case '4':
                         CheckParanthesis();
                         break;
-                    /*
-                     * Extend the menu to include the recursive 
-                     * and iterative exercises.
-                     */
+                    case '5':
+                        ExamineRecursion();
+                        break;
+                    case '6':
+                        ExamineIteration();
+                        break;
                     case '0':
                         return;
                     default:
@@ -63,6 +67,8 @@ namespace ShellProj_Datastructures_Memory
                 }
             }
         }
+
+        #region Main_Method
 
         /// <summary>
         /// Examines the datastructure List
@@ -85,19 +91,13 @@ namespace ShellProj_Datastructures_Memory
                 Console.WriteLine("List contains:");
                 Console.WriteLine(DisplayList(theList));
                 Console.WriteLine("--------------------------------------------------");
-                Console.WriteLine("Please input string with + or - to update the list");
-                Console.WriteLine("Input 0 to come back to main menu");
+                Console.WriteLine("Please input +string to put person to the list");
+                Console.WriteLine("Please input -string to take person from the list");
+                Console.WriteLine("Input 0 or Enter to come back to main menu");
                 string input = Console.ReadLine();
 
                 // if user enter 0 then exit to main menu
-                if (input == "0") break;
-
-                //If user enter empty string, inform they need enter valid string
-                if (input.Length == 0)
-                {
-                    MessageBox.Show("Please input the string begin with + or -");
-                    continue;
-                }
+                if (input == "0" || input.Length == 0) break;
 
                 char nav = input[0];
                 string value = input.Substring(1);
@@ -130,41 +130,6 @@ namespace ShellProj_Datastructures_Memory
             
         }
 
-
-        //Display the list with capacity
-        private static string DisplayList(List<string> theList)
-        {
-            string output ="";
-            if (theList.Count == 0) output += "Empty";
-            else
-            {
-                foreach (string s in theList)
-                {
-                    output += s + "\n";
-                }
-            }
-            output += "\nCapacity of the list: " + theList.Capacity;
-            return output;
-        }
-
-        //Display other collection with count
-
-        private static string DisplayList(ICollection theList, string Description, bool SeparateItem = true)
-        {
-            string output = Description + "\n";
-            if (theList.Count == 0) output += "Empty";
-            else
-            {
-                foreach (var s in theList)
-                {
-                    output += s + (SeparateItem ? "\n" : "");
-                }
-            }
-            output += "\nTotal: " + theList.Count;
-            return output;
-        }
-
-
         /// <summary>
         /// Examines the datastructure Queue
         /// </summary>
@@ -182,18 +147,12 @@ namespace ShellProj_Datastructures_Memory
                 Console.Clear();
                 Console.WriteLine(DisplayList(theQueue, "Queue contains:"));
                 Console.WriteLine("--------------------------------------------------");
-                Console.WriteLine("Input 0 to come back to main menu");
                 Console.WriteLine("Input +string to put person into queue");
                 Console.WriteLine("Input - to take person from queue");
+                Console.WriteLine("Input 0 or Enter to come back to main menu");
                 string input = Console.ReadLine();
-                if (input == "0") break;
+                if (input == "0" || input.Length == 0) break;
 
-                //If user enter empty string, inform they need enter valid string
-                if (input.Length == 0)
-                {
-                    MessageBox.Show("Please input the string begin with + or -");
-                    continue;
-                }
                 char nav = input[0];
                 string value = input.Substring(1);
                 switch (nav)
@@ -237,13 +196,13 @@ namespace ShellProj_Datastructures_Memory
                 Console.Clear();
                 Console.WriteLine(DisplayList(theStack, Description, Separated));
                 Console.WriteLine("--------------------------------------------------");
-                Console.WriteLine("Input 0 to come back to main menu");
-                Console.WriteLine("Input #string to reverse string");
-                Console.WriteLine("Input - to take person from stack");
                 Console.WriteLine("Input +string to put person into stack");
-
+                Console.WriteLine("Input - to take person from stack");
+                Console.WriteLine("Input #string to reverse string");
+                Console.WriteLine("Input 0 or Enter to come back to main menu");
                 string input = Console.ReadLine();
-                if (input == "0") break;
+                if (input == "0" || input.Length == 0) break;
+
                 char nav = input[0];
                 string value = input.Substring(1);
                 switch (nav)
@@ -282,6 +241,152 @@ namespace ShellProj_Datastructures_Memory
 
         }
 
+        static void CheckParanthesis()
+        {
+            /*
+             * Use this method to check if the paranthesis in a string is Correct or incorrect.
+             * Example of correct: (()), {}, [({})]
+             * Example of incorrect: (()]), [), {[()}]
+             */
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Please input string to check paranthesis: ");
+                Console.WriteLine("Press Enter to come back main menu: ");
+                string input = Console.ReadLine();
+
+                //If user enter empty string, inform they need enter valid string
+                if (input.Length == 0) break;
+
+                //Queue to contain paranthesis character in inputed string
+                Queue theQueue = new Queue();
+                char[] paranthesis = new char[] { '<', '>', '{', '}', '[', ']', '(', ')' };
+                foreach (char ch in input)
+                {
+                    if (paranthesis.Contains(ch))
+                        theQueue.Enqueue(ch);
+                }
+
+                //Array to check each paranthesis, can not use directly queue because it's updated through each iteration
+                char[] existingParanthesis = new char[theQueue.Count];
+                theQueue.CopyTo(existingParanthesis, 0);
+
+                //algorithm: take the first paranthesis in queue, put it into stack
+                //Take the second paranthesis in queue, 
+                //If it is matching with the one in stack -> remove both of them from queue and stack. Otherwise, put it into stack.
+                //Continue to the end of list. 
+                //If the stack is empty (everything has matched) -> input string is well formed. Otherwise -> not well formed.
+                Stack theStack = new Stack();
+                foreach (char ch in existingParanthesis)
+                {
+                    if (theStack.Count == 0 || !MatchCouple(ch, (char)theStack.Peek()))
+                    {
+                        theQueue.Dequeue();
+                        theStack.Push(ch);
+                    }
+                    else
+                    {
+                        theQueue.Dequeue();
+                        theStack.Pop();
+                    }
+
+                }
+
+                if (theStack.Count == 0)
+                    Console.WriteLine("Inputed string is well formed");
+                else
+                    Console.WriteLine("Inputed string is NOT well formed");
+                Console.ReadLine();
+            } while (true);
+            
+
+        }
+
+        private static void ExamineRecursion()
+        {
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Input 0 or Enter to come back to main menu");
+                Console.WriteLine("Input #number to calculate n:th even number");
+                Console.WriteLine("Input &number to print n first number in fibonacci");
+                string input = Console.ReadLine();
+                if (input == "0" || input.Length == 0) break;             
+
+                char nav = input[0];
+                string value = input.Substring(1);
+                int number = 0;
+
+                //If user enter not number, inform they need enter valid value
+                if (!int.TryParse(value, out number))
+                {
+                    MessageBox.Show("Please only use # or & with number to caculate");
+                    continue;
+                }
+
+                switch (nav)
+                {
+                    case '#':
+                        Console.WriteLine("Result: " + RecursionEven(number));
+                        Console.ReadLine();
+                        break;
+                    case '&':
+                        Console.WriteLine("Result: " + RecursionFibonacy(number));
+                        Console.ReadLine();
+                        break;
+                    default:
+                        MessageBox.Show("Please only use # or & with number to caculate");
+                        //System.Threading.Thread.Sleep(500);
+                        break;
+                }
+
+            } while (true);
+        }
+
+        private static void ExamineIteration()
+        {
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Input 0 or Enter to come back to main menu");
+                Console.WriteLine("Input #number to calculate n:th even number");
+                Console.WriteLine("Input &number to print n first number in fibonacci");
+                string input = Console.ReadLine();
+                if (input == "0" || input.Length == 0) break;
+
+                char nav = input[0];
+                string value = input.Substring(1);
+                int number = 0;
+
+                //If user enter not number, inform they need enter valid value
+                if (!int.TryParse(value, out number))
+                {
+                    MessageBox.Show("Please only use # or & with number to caculate");
+                    continue;
+                }
+
+                switch (nav)
+                {
+                    case '#':
+                        Console.WriteLine("Result: " + IterationEven(number));
+                        Console.ReadLine();
+                        break;
+                    case '&':
+                        Console.WriteLine("Result: " + InterationFibonacy(number));
+                        Console.ReadLine();
+                        break;
+                    default:
+                        MessageBox.Show("Please only use # or & with number to caculate");
+                        //System.Threading.Thread.Sleep(500);
+                        break;
+                }
+
+            } while (true);
+        }
+
+        #endregion
+
+        #region Other_Method
         //Put string into a stack
         private static Stack PushString(string input)
         {
@@ -294,68 +399,42 @@ namespace ShellProj_Datastructures_Memory
             return theStack;
         }
 
-
-        static void CheckParanthesis()
+        //Display the list with capacity
+        private static string DisplayList(List<string> theList)
         {
-            /*
-             * Use this method to check if the paranthesis in a string is Correct or incorrect.
-             * Example of correct: (()), {}, [({})]
-             * Example of incorrect: (()]), [), {[()}]
-             */
-            Console.Clear();
-            Console.Write("Please input string to check paranthesis: ");
-            string input = Console.ReadLine();
-
-            //If user enter empty string, inform they need enter valid string
-            if (input.Length == 0)
-            {
-                MessageBox.Show("String can not be empty");
-                return;
-            }
-
-            //Queue to contain paranthesis character in inputed string
-            Queue theQueue = new Queue();            
-            char[] paranthesis = new char[] { '<', '>', '{', '}', '[', ']', '(', ')' };
-            foreach( char ch in input)
-            {
-                if (paranthesis.Contains(ch))
-                    theQueue.Enqueue(ch);
-            }
-
-            //Array to check each paranthesis, can not use directly queue because it's updated through each iteration
-            char[] existingParanthesis = new char[theQueue.Count];
-            theQueue.CopyTo(existingParanthesis, 0);
-
-            //algorithm: take the first paranthesis in queue, put it into stack
-            //Take the second paranthesis in queue, 
-            //If it is matching with the one in stack -> remove both of them from queue and stack. Otherwise, put it into stack.
-            //Continue to the end of list. 
-            //If the stack is empty (everything has matched) -> input string is well formed. Otherwise -> not well formed.
-            Stack theStack = new Stack();
-            foreach (char ch in existingParanthesis)
-            {
-                if (theStack.Count == 0 || !MatchClose(ch,(char) theStack.Peek()))
-                {
-                    theQueue.Dequeue();
-                    theStack.Push(ch);
-                }
-                else
-                {
-                    theQueue.Dequeue();
-                    theStack.Pop();
-                }
-                    
-            }
-
-            if (theStack.Count == 0)
-                Console.WriteLine("Inputed string is well formed");
+            string output = "";
+            if (theList.Count == 0) output += "Empty";
             else
-                Console.WriteLine("Inputed string is NOT well formed");
-            Console.ReadLine();
-   
+            {
+                foreach (string s in theList)
+                {
+                    output += s + "\n";
+                }
+            }
+            output += "\nCapacity of the list: " + theList.Capacity;
+            return output;
         }
 
-        private static bool MatchClose(char close, char open)
+        //Display other collection with count
+        private static string DisplayList(ICollection theList, string Description, bool SeparateItem = true)
+        {
+            string output = Description + "\n";
+            if (theList.Count == 0) output += "Empty";
+            else
+            {
+                foreach (var s in theList)
+                {
+                    output += s + (SeparateItem ? "\n" : "");
+                }
+            }
+            output += "\nTotal: " + theList.Count;
+            return output;
+
+
+
+        }
+        
+        private static bool MatchCouple(char close, char open)
         {
             if (open.Equals('{') && close.Equals('}'))
                 return true;
@@ -367,5 +446,75 @@ namespace ShellProj_Datastructures_Memory
                 return true;
             return false;
         }
+
+        private static int Fibonacy(int number)
+        {
+            if (number == 1)
+            {
+                return 0;
+            }
+            if (number == 2)
+            {
+                return 1;
+            }
+            return (Fibonacy(number - 1) + Fibonacy(number - 2));
+        }
+
+        private static string RecursionFibonacy(int number)
+        {
+            string output = "";
+            for (int i = 1; i <= number; i++)
+            {
+                output += " " + Fibonacy(i);
+            }
+            return output;
+        }
+
+        private static int RecursionEven(int number)
+        {
+            if (number == 0)
+            {
+                return 0;
+            }
+            return RecursionEven(number - 1) + 2;
+        }
+
+        private static string InterationFibonacy(int number)
+        {
+            if (number == 1)
+            {
+                return "0";
+            }
+            if (number == 2)
+            {
+                return "0 1"; 
+            }
+
+            int a = 0;
+            int b = 1;
+            string result = "0 1";
+            for (int i=3; i<= number; i++)
+            {
+                int c = a + b;
+                result += " " + c;
+                a = b;
+                b = c;
+            }
+
+            return result;
+        }
+
+        private static int IterationEven(int number)
+        {
+            if (number == 0) return 0;
+            int result = 0;
+            for(int i=1; i<= number; i++)
+            {
+                result += 2;
+            }
+            return result;
+        }
+
+        #endregion
     }
 }

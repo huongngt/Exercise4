@@ -64,7 +64,7 @@ namespace ShellProj_Datastructures_Memory
         /// <summary>
         /// Examines the datastructure List
         /// </summary>
-    public static void ExamineList()
+        public static void ExamineList()
         {
             /*
              * Loop this method untill the user inputs something to exit to main menue.
@@ -79,12 +79,12 @@ namespace ShellProj_Datastructures_Memory
             List<string> theList = new List<string>();
 
             do {
-                
+
 
                 Console.WriteLine("Please enter values with '+' or '-' ");
                 string input = Console.ReadLine();
 
-                
+
                 if (input == "0")
                 {
                     break;
@@ -101,7 +101,7 @@ namespace ShellProj_Datastructures_Memory
                         break;
                     case '-':
                         theList.Remove(value);
-                       Console.WriteLine("Value removed from the list is: " + value);
+                        Console.WriteLine("Value removed from the list is: " + value);
                         break;
                     default:
                         Console.WriteLine("Please use + or -");
@@ -286,7 +286,7 @@ namespace ShellProj_Datastructures_Memory
 
 
                 }
-                
+
 
             } while (true);
             Console.Clear();
@@ -299,7 +299,86 @@ namespace ShellProj_Datastructures_Memory
              * Example of correct: (()), {}, [({})]
              * Example of incorrect: (()]), [), {[()}]
              */
+            Console.WriteLine("Please enter some input");
+            string input=Console.ReadLine();
+             
+            Dictionary<char, char> bracketPairs = new Dictionary<char, char>() {
+            { '(', ')' },
+            { '{', '}' },
+            { '[', ']' },
+            { '<', '>' }
+                      };
+
+            Stack<char> brackets = new Stack<char>();
+            //string result;
+            try {
+                // Iterate through each character in the input string
+                foreach (char c in input)
+                {
+                    // check if the character is one of the 'opening' brackets
+                    if (bracketPairs.Keys.Contains(c))
+                    {
+                        // if yes, push to stack
+                        brackets.Push(c);
+                    }
+                    else {
+                        // check if the character is one of the 'closing' brackets
+                           if (bracketPairs.Values.Contains(c))
+                            {
+                            // check if the closing bracket matches the 'latest' 'opening' bracket
+                                        if (c == bracketPairs[brackets.First()])
+                                        {
+                                            brackets.Pop();
+                                        }
+                                        else
+                                        {
+                                           brackets.Push('c');
+                                // if not, its an unbalanced string
+                                //  Console.WriteLine("Its an unbalanced string");
+                            }
+                               }
+                         else
+                            // continue looking
+                         continue;
+                    }  
+
+                }
+
+            }
+            catch
+            {
+                // an exception will be caught in case a closing bracket is found, 
+                // before any opening bracket.
+                // that implies, the string is not balanced.
+              
+             //  Console.WriteLine("Closing bracket is found first");
+                brackets.Push('c');
+               
+
+               }
+
+            // Ensure all brackets are closed
+
+            if (brackets.Count() == 0)
+            {
+
+                Console.WriteLine("String is Balanced");
+                Console.ReadLine();
+               
+            }
+            else
+            {
+                Console.WriteLine("String is not Balanced");
+                Console.ReadLine();
+               
+            }
+            Console.Clear();
         }
+        
+
+    
 
     }
+
+
 }

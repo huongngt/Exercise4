@@ -145,7 +145,7 @@ namespace ShellProj_Datastructures_Memory
             do
             {
                 Console.Clear();
-                Console.WriteLine(DisplayList(theQueue, "Queue contains:"));
+                Console.WriteLine(DisplayList(theQueue));
                 Console.WriteLine("--------------------------------------------------");
                 Console.WriteLine("Input +string to put person into queue");
                 Console.WriteLine("Input - to take person from queue");
@@ -189,12 +189,10 @@ namespace ShellProj_Datastructures_Memory
              * Make sure to look at the stack after pushing and and poping to see how it behaves
             */
             Stack theStack = new Stack();
-            string Description = "Stack contains:";
-            bool Separated = true;
             do
             {
                 Console.Clear();
-                Console.WriteLine(DisplayList(theStack, Description, Separated));
+                Console.WriteLine(DisplayList(theStack));
                 Console.WriteLine("--------------------------------------------------");
                 Console.WriteLine("Input +string to put person into stack");
                 Console.WriteLine("Input - to take person from stack");
@@ -212,24 +210,18 @@ namespace ShellProj_Datastructures_Memory
                             MessageBox.Show("Name can not be empty");
                         else
                             theStack.Push(value);
-                        Separated = true;
                         break;
                     case '-':
                         if (theStack.Count > 0)
                             theStack.Pop();
                         else
                             MessageBox.Show("The stack is now empty");
-                        Separated = true;
                         break;
                     case '#':
                         if (value.Length == 0)
                             MessageBox.Show("String can not be empty");
-                        else
-                        {
-                            theStack = PushString(value);
-                            Description = "Reversed string: ";
-                            Separated = false;
-                        }
+                        else                        
+                            Console.WriteLine("Reversed string: " + ReverseString(value));                        
                         break;
                     default:
                         MessageBox.Show("Please only use +,- or # to update stack");
@@ -302,8 +294,8 @@ namespace ShellProj_Datastructures_Memory
             {
                 Console.Clear();
                 Console.WriteLine("Input 0 or Enter to come back to main menu");
-                Console.WriteLine("Input #number to calculate n:th even number");
-                Console.WriteLine("Input &number to print n first number in fibonacci");
+                Console.WriteLine("Input +number to calculate n:th even number");
+                Console.WriteLine("Input -number to print n first number in fibonacci");
                 string input = Console.ReadLine();
                 if (input == "0" || input.Length == 0) break;             
 
@@ -314,22 +306,25 @@ namespace ShellProj_Datastructures_Memory
                 //If user enter not number, inform they need enter valid value
                 if (!int.TryParse(value, out number))
                 {
-                    MessageBox.Show("Please only use # or & with number to caculate");
+                    MessageBox.Show("Please only use + or - with number to caculate");
                     continue;
                 }
 
                 switch (nav)
                 {
-                    case '#':
+                    case '+':
                         Console.WriteLine("Result: " + RecursionEven(number));
                         Console.ReadLine();
                         break;
-                    case '&':
-                        Console.WriteLine("Result: " + RecursionFibonacy(number));
+                    case '-':
+                        if (number <= 0)
+                            MessageBox.Show("Please input number > 1");
+                        else
+                            RecursionFibonacy(0,1,1,number);
                         Console.ReadLine();
                         break;
                     default:
-                        MessageBox.Show("Please only use # or & with number to caculate");
+                        MessageBox.Show("Please only use + or - with number to caculate");
                         //System.Threading.Thread.Sleep(500);
                         break;
                 }
@@ -343,8 +338,8 @@ namespace ShellProj_Datastructures_Memory
             {
                 Console.Clear();
                 Console.WriteLine("Input 0 or Enter to come back to main menu");
-                Console.WriteLine("Input #number to calculate n:th even number");
-                Console.WriteLine("Input &number to print n first number in fibonacci");
+                Console.WriteLine("Input +number to calculate n:th even number");
+                Console.WriteLine("Input -number to print n first number in fibonacci");
                 string input = Console.ReadLine();
                 if (input == "0" || input.Length == 0) break;
 
@@ -355,22 +350,22 @@ namespace ShellProj_Datastructures_Memory
                 //If user enter not number, inform they need enter valid value
                 if (!int.TryParse(value, out number))
                 {
-                    MessageBox.Show("Please only use # or & with number to caculate");
+                    MessageBox.Show("Please only use + or - with number to caculate");
                     continue;
                 }
 
                 switch (nav)
                 {
-                    case '#':
+                    case '+':
                         Console.WriteLine("Result: " + IterationEven(number));
                         Console.ReadLine();
                         break;
-                    case '&':
+                    case '-':
                         Console.WriteLine("Result: " + InterationFibonacy(number));
                         Console.ReadLine();
                         break;
                     default:
-                        MessageBox.Show("Please only use # or & with number to caculate");
+                        MessageBox.Show("Please only use + or - with number to caculate");
                         //System.Threading.Thread.Sleep(500);
                         break;
                 }
@@ -382,15 +377,19 @@ namespace ShellProj_Datastructures_Memory
 
         #region Other_Method
         //Put string into a stack
-        private static Stack PushString(string input)
+        private static string ReverseString(string input)
         {
             Stack theStack = new Stack();
+            string output = "";
             foreach (char ch in input)
             {
                 theStack.Push(ch);
             }
-
-            return theStack;
+            while(theStack.Count > 0)
+            {
+                output += theStack.Pop();
+            }
+            return output;
         }
 
         //Display the list with capacity
@@ -410,15 +409,15 @@ namespace ShellProj_Datastructures_Memory
         }
 
         //Display other collection with count
-        private static string DisplayList(ICollection theList, string Description, bool SeparateItem = true)
+        private static string DisplayList(ICollection theList)
         {
-            string output = Description + "\n";
+            string output = theList.GetType().Name + " contains: \n";
             if (theList.Count == 0) output += "Empty";
             else
             {
                 foreach (var s in theList)
                 {
-                    output += s + (SeparateItem ? "\n" : "");
+                    output += s +  "\n";
                 }
             }
             output += "\nTotal: " + theList.Count;
@@ -454,14 +453,11 @@ namespace ShellProj_Datastructures_Memory
             return (Fibonacy(number - 1) + Fibonacy(number - 2));
         }
 
-        private static string RecursionFibonacy(int number)
+        private static void RecursionFibonacy(int first, int second, int counter, int number)
         {
-            string output = "";
-            for (int i = 1; i <= number; i++)
-            {
-                output += " " + Fibonacy(i);
-            }
-            return output;
+            Console.Write(first + " ");
+            if (counter < number)
+                RecursionFibonacy(second, first + second, counter + 1, number);            
         }
 
         private static int RecursionEven(int number)

@@ -14,7 +14,7 @@ namespace ShellProj_Datastructures_Memory
         /// <param name="args"></param>
         static void Main()
         {
-            bool run = true;
+            //bool run = true;
             while (true)
             {
 
@@ -23,6 +23,8 @@ namespace ShellProj_Datastructures_Memory
                     + "\n2. Examine a Queue"
                     + "\n3. Examine a Stack"
                     + "\n4. CheckParanthesis"
+                     + "\n5. Recursive"
+                    + "\n6. Iterative"
                     + "\n0. Exit the application");
                 char input = ' '; //Creates the character input to be used with the switch-case below.
                 try
@@ -48,6 +50,12 @@ namespace ShellProj_Datastructures_Memory
                     case '4':
                         CheckParanthesis();
                         break;
+                    case '5':
+                        Recursive();
+                        break;
+                    case '6':
+                        Iterative();
+                        break;
                     /*
                      * Extend the menu to include the recursive 
                      * and iterative exercises.
@@ -64,7 +72,7 @@ namespace ShellProj_Datastructures_Memory
         /// <summary>
         /// Examines the datastructure List
         /// </summary>
-        public static void ExamineList()
+        static void ExamineList()
         {
             /*
              * Loop this method untill the user inputs something to exit to main menue.
@@ -136,10 +144,8 @@ namespace ShellProj_Datastructures_Memory
             Queue<string> Testqueue = new Queue<string>();
             do
             {
-
-                //string input = Console.ReadLine();
                 Console.WriteLine("\n Press 1 to enter the Queue," +
-             "\n Press 2 to leave from the Queue,\n Press 3 to see the list on queue,\n press 0 to quit ");
+       "\n Press 2 to leave from the Queue,\n Press 3 to see the list on queue,\n press 0 to quit ");
                 char input = ' '; //Creates the character input to be used with the switch-case below.
                 try
                 {
@@ -300,8 +306,8 @@ namespace ShellProj_Datastructures_Memory
              * Example of incorrect: (()]), [), {[()}]
              */
             Console.WriteLine("Please enter some input");
-            string input=Console.ReadLine();
-             
+            string input = Console.ReadLine();
+            bool check = true;
             Dictionary<char, char> bracketPairs = new Dictionary<char, char>() {
             { '(', ')' },
             { '{', '}' },
@@ -323,24 +329,25 @@ namespace ShellProj_Datastructures_Memory
                     }
                     else {
                         // check if the character is one of the 'closing' brackets
-                           if (bracketPairs.Values.Contains(c))
-                            {
+                        if (bracketPairs.Values.Contains(c))
+                        {
                             // check if the closing bracket matches the 'latest' 'opening' bracket
-                                        if (c == bracketPairs[brackets.First()])
-                                        {
-                                            brackets.Pop();
-                                        }
-                                        else
-                                        {
-                                           brackets.Push('c');
+                            if (c == bracketPairs[brackets.First()])
+                            {
+                                brackets.Pop();
+                            }
+                            else
+                            {
+                                check = false;
+
                                 // if not, its an unbalanced string
                                 //  Console.WriteLine("Its an unbalanced string");
                             }
-                               }
-                         else
+                        }
+                        else
                             // continue looking
-                         continue;
-                    }  
+                            continue;
+                    }
 
                 }
 
@@ -350,35 +357,200 @@ namespace ShellProj_Datastructures_Memory
                 // an exception will be caught in case a closing bracket is found, 
                 // before any opening bracket.
                 // that implies, the string is not balanced.
-              
-             //  Console.WriteLine("Closing bracket is found first");
-                brackets.Push('c');
-               
 
-               }
+                //  Console.WriteLine("Closing bracket is found first");
+
+                check = false;
+            }
 
             // Ensure all brackets are closed
-
-            if (brackets.Count() == 0)
+            // check = brackets.Count() == 0 ? true : false;
+            if (brackets.Count() == 0 && check == true)
             {
-
-                Console.WriteLine("String is Balanced");
-                Console.ReadLine();
-               
+                Console.WriteLine("String is balanced\n");
             }
-            else
+            else if (check == false && brackets.Count() == 0)
             {
-                Console.WriteLine("String is not Balanced");
-                Console.ReadLine();
-               
+                Console.WriteLine("String is not balanced\n");
             }
-            Console.Clear();
+            else if (check == true && brackets.Count() != 0)
+            {
+                Console.WriteLine("String is not balanced\n");
+            }
         }
-        
+        static void Recursive()
+        {
+            int i, x = 0;
 
-    
+            do
+            {
+                Console.WriteLine(" \n To Check Sum Of Odd Numbers type 'Odd'\n To Check Sum Of Even Numbers type 'Even'\n" +
+                    " To Check Fibonacci Series type 'Fibo'\n To Exit type 'Exit'");
+                string input = Console.ReadLine();
+                if (input != "Odd" && input != "Even" && input != "Fibo" && input != "Exit") { Console.WriteLine("Invalid Input"); }
+                else if (input == "Exit") break;
 
-    }
+                try
+                {
+                    switch (input)
+                    {
+                        case "Odd":
+                            Console.WriteLine("Enter Input:");
+                            i = int.Parse(Console.ReadLine());
+                            x = RecursiveOdd(i);
+                            Console.WriteLine("Sum of odd numbers " + x);
+                            break;
+                        case "Even":
+                            Console.WriteLine("Enter Input:");
+                            i = int.Parse(Console.ReadLine());
+                            x = RecursiveEven(i);
+                            Console.WriteLine("Sum of Even numbers " + x);
+                            break;
+                        case "Fibo":
+                            Console.WriteLine("Enter Input:");
+                            i = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Fibonacci Series:");
+                            FibonacciSeries(i);
+                            break;
+                        case "Default":
+                            Console.WriteLine("Invalid input! Provide valid input.");
+                            break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Invalid Input! Please enter a number");
+                };
+            } while (true);
+
+        }
+       public static int RecursiveOdd(int n)
+        {
+            if (n == 0)
+            {
+                return 1;
+            }
+            return (RecursiveOdd(n - 1) + 2);
+        }
+        public static int RecursiveEven(int n)
+        {
+            if (n == 0)
+            {
+                return 0;
+            }
+            return (RecursiveEven(n - 1) + 2);
+        }
+        public static void FibonacciSeries(int n)
+        {
+
+            fibonacci(0, 1, 1, n);
+        }
+
+        public static void fibonacci(int a, int b, int counter, int len)
+        {
+            if (counter <= len)
+            {
+                Console.Write("{0} ", a);
+                fibonacci(b, a + b, counter + 1, len);
+            }
+
+        }
+
+         static void Iterative()
+        {
+            int i, x;
+
+            do
+            {
+                Console.WriteLine(" \n To Check Sum Of Odd Numbers type 'Odd'\n To Check Sum Of Even Numbers type 'Even'\n" +
+                    " To Check Fibonacci Series type 'Fibo'\n To Exit type 'Exit'");
+                string input = Console.ReadLine();
+
+                if (input != "Odd" && input != "Even" && input != "Fibo" && input != "Exit") { Console.WriteLine("Invalid Input"); }
+                else if (input == "Exit") break;
+
+                try
+                {
+                    switch (input)
+                    {
+
+                        case "Odd":
+                            Console.WriteLine("Enter Input:");
+                            i = int.Parse(Console.ReadLine());
+                            x = IterativeOdd(i);
+                            Console.WriteLine("Sum of Odd numbers " + x);
+                            break;
+                        case "Even":
+                            Console.WriteLine("Enter Input:");
+                            i = int.Parse(Console.ReadLine());
+                            x = IterativeEven(i);
+                            Console.WriteLine("Sum of Even numbers " + x);
+                            break;
+                        case "Fibo":
+                            Console.WriteLine("Enter Input:");
+                            i = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Fibonacci Series:");
+                            IterativeFibonacciSeries(i);
+                            break;
+                        //case "Exit":
+                        //        break;
+                        case "Default":
+                            Console.WriteLine("Invalid input! Provide valid input.");
+                            break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Invalid Input! Please enter a number");
+                };
+
+            } while (true);
+        }
+         public static int IterativeOdd(int n)
+            {
+                if (n == 0)
+                {
+                    return 1;
+                }
+                int result = 1;
+                for (int i = 1; i <= n; i++)
+                {
+                    result += 2;
+                }
+                return result;
+            }
+         public static int IterativeEven(int n)
+            {
+                if (n == 0)
+                {
+                    return 0;
+                }
+                int result = 0;
+                for (int i = 1; i <= n; i++)
+                {
+                    result += 2;
+                }
+                return result;
+            }
+
+        public static void IterativeFibonacciSeries(int n)
+            {
+                int f1 = 0, f2 = 1, f3 = 0;
+                Console.Write("{0} ", f1);
+                Console.Write("{0} ", f2);
+                for (int i = 0; i < n - 2; i++)
+                {
+                    f3 = f1 + f2;
+                    Console.Write("{0} ", f3);
+                    f1 = f2;
+                    f2 = f3;
+                }
+                Console.ReadLine();
+            }
+
+     
+
+      }
 
 
 }

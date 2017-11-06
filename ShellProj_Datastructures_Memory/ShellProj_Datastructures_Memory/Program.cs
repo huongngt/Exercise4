@@ -339,7 +339,7 @@ namespace ShellProj_Datastructures_Memory
                             else
                             {
                                 check = false;
-
+                                brackets.Count();
                                 // if not, its an unbalanced string
                                 //  Console.WriteLine("Its an unbalanced string");
                             }
@@ -361,22 +361,22 @@ namespace ShellProj_Datastructures_Memory
                 //  Console.WriteLine("Closing bracket is found first");
 
                 check = false;
+                brackets.Count();
             }
 
             // Ensure all brackets are closed
             // check = brackets.Count() == 0 ? true : false;
+          
             if (brackets.Count() == 0 && check == true)
             {
                 Console.WriteLine("String is balanced\n");
             }
-            else if (check == false && brackets.Count() == 0)
+            else 
             {
                 Console.WriteLine("String is not balanced\n");
             }
-            else if (check == true && brackets.Count() != 0)
-            {
-                Console.WriteLine("String is not balanced\n");
-            }
+
+
         }
         static void Recursive()
         {
@@ -424,7 +424,7 @@ namespace ShellProj_Datastructures_Memory
             } while (true);
 
         }
-       public static int RecursiveOdd(int n)
+        public static int RecursiveOdd(int n)
         {
             if (n == 0)
             {
@@ -432,6 +432,7 @@ namespace ShellProj_Datastructures_Memory
             }
             return (RecursiveOdd(n - 1) + 2);
         }
+    
         public static int RecursiveEven(int n)
         {
             if (n == 0)
@@ -448,7 +449,7 @@ namespace ShellProj_Datastructures_Memory
 
         public static void fibonacci(int a, int b, int counter, int len)
         {
-            if (counter <= len)
+           if (counter <= len)
             {
                 Console.Write("{0} ", a);
                 fibonacci(b, a + b, counter + 1, len);
